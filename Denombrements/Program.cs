@@ -6,68 +6,83 @@ using System.Threading.Tasks;
 
 namespace Denombrements
 {
+    /// <summary>
+    /// Interface de calculs de dénombrements 
+    /// Permutations, arrangements et combinaisons
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// Calcul du produit de tous les entiers compris entre valeurDepart et valeurArrivee
+        /// </summary>
+        /// <param name="valeurDepart"></param>
+        /// <param name="valeurArrivee"></param>
+        /// <returns>résultat ou 0 si impossible</returns>
+        static long Calcul(int valeurDepart, int valeurArrivee)
+        {
+            long produit = 1;
+            for (int k = valeurDepart; k <= valeurArrivee; k++)
+            {
+                produit *= k;
+            }
+            return produit;
+        }
+
+
+
+        /// <summary>
+        /// Menu pour faire plusieurs fois des calculs de permutations, arrangements et combinaisons
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int c = 1;
-            while (c != 0)
+            string choix = "1";
+            while (choix != "0")
             {
                 Console.WriteLine("Permutation ...................... 1");
                 Console.WriteLine("Arrangement ...................... 2");
                 Console.WriteLine("Combinaison ...................... 3");
                 Console.WriteLine("Quitter .......................... 0");
                 Console.Write("Choix :                            ");
-                c = int.Parse(Console.ReadLine());
-
-                if (c == 0) { Environment.Exit(0); }
-
-                if (c == 1)
+                choix = Console.ReadLine();
+                // Choix sans quitter
+                if (choix == "1" || choix == "2" || choix == "3")
                 {
-                    Console.Write("nombre total d'éléments à gérer = "); // le nombre d'éléments à gérer
-                    int n = int.Parse(Console.ReadLine()); // saisir le nombre
-                                                           // calcul de r
-                    long r = 1;
-                    for (int k = 1; k <= n; k++)
-                        r *= k;
-                    Console.WriteLine(n + "! = " + r);
-                }
-                else
-                {
-                    if (c == 2)
+                    try
                     {
-                        Console.Write("nombre total d'éléments à gérer = "); // le nombre d'éléments à gérer
-                        int t = int.Parse(Console.ReadLine()); // saisir le nombre
-                        Console.Write("nombre d'éléments dans le sous ensemble = "); // le sous ensemble
-                        int n = int.Parse(Console.ReadLine()); // saisir le nombre
-                        // calcul de r
-                        long r = 1;
-                        for (int k = (t - n + 1); k <= t; k++)
-                            r *= k;
-                        //Console.WriteLine("résultat = " + (r1 / r2));
-                        Console.WriteLine("A(" + t + "/" + n + ") = " + r);
+                        Console.Write("Nombre total d'éléments à gérer = ");
+                        int nbTotal = int.Parse(Console.ReadLine());
+                        // Permutation
+                        if (choix == "1")
+                        {
+                            long permutation = Calcul(1, nbTotal);
+                            Console.WriteLine(nbTotal + "! = " + permutation);
+                        }
+                        else
+                        {
+                            Console.Write("Nombre d'éléments dans le sous ensemble = ");
+                            int nbSousEnsemble = int.Parse(Console.ReadLine());
+                            //Calcul de l'arrangement qui sert aussi de combinaison
+                            long arrangement = Calcul(nbTotal - nbSousEnsemble + 1, nbTotal);
+                            //Arrangement
+                            if (choix == "2")
+                            {
+                                Console.WriteLine("A(" + nbTotal + "/" + nbSousEnsemble + ") = " + arrangement);
+                            }
+                            //Combinaison
+                            else
+                            {
+                                long combinaison = arrangement / Calcul(1, nbSousEnsemble);
+                                Console.WriteLine("C(" + nbTotal + "/" + nbSousEnsemble + ") = " + combinaison);
+                            }
+                        }
                     }
-                    else
+                    catch
                     {
-                        Console.Write("nombre total d'éléments à gérer = "); // le nombre d'éléments à gérer
-                        int t = int.Parse(Console.ReadLine()); // saisir le nombre
-                        Console.Write("nombre d'éléments dans le sous ensemble = "); // le sous ensemble
-                        int n = int.Parse(Console.ReadLine()); // saisir le nombre
-                        // calcul de r1
-                        long r1 = 1;
-                        for (int k = (t - n + 1); k <= t; k++)
-                            r1 *= k;
-                        // calcul de r2
-                        long r2 = 1;
-                        for (int k = 1; k <= n; k++)
-                            r2 *= k;
-                        // calcul de r3
-                        //Console.WriteLine("résultat = " + (r1 / r2));
-                        Console.WriteLine("C(" + t + "/" + n + ") = " + (r1 / r2));
+                        Console.WriteLine("Calcul impossible : valeur(s) incorrectes ou trop grand(e)s.");
                     }
                 }
             }
-            Console.ReadLine();
         }
     }
 }
